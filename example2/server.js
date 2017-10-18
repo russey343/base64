@@ -3,7 +3,7 @@ var fs = require('fs');
 var formidable = require('formidable');
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
-var mongourl = "mongodb://scttest06:60tsettcs@ds155587.mlab.com:55587/scttest06";
+var mongourl = "";
 
 var server = http.createServer(function (req, res) {
   if (req.url == '/fileupload') {
