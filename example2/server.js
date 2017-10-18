@@ -41,7 +41,7 @@ var server = http.createServer(function (req, res) {
 });
 
 function insertPhoto(db,r,callback) {
-  db.collection('restaurants').insertOne(r,function(err,result) {
+  db.collection('photos').insertOne(r,function(err,result) {
     assert.equal(err,null);
     console.log("insert was successful!");
     console.log(JSON.stringify(result));
