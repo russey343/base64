@@ -1,4 +1,5 @@
 var http = require('http');
+var url = require('url');
 var fs = require('fs');
 var formidable = require('formidable');
 var MongoClient = require('mongodb').MongoClient;
@@ -6,7 +7,9 @@ var assert = require('assert');
 var mongourl = "";
 
 var server = http.createServer(function (req, res) {
-  if (req.url == '/fileupload') {
+  var parsedURL = url.parse(req.url,true);
+  
+  if (parsedURL.pathname == '/fileupload') {
     var form = new formidable.IncomingForm();
     form.parse(req, function (err, fields, files) {
       console.log(JSON.stringify(files));
