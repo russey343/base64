@@ -3,7 +3,7 @@
 	"description": "COMPS381F - Base64 Example",
 	"version": "1.0.0",
 	"dependencies": {
-		"mongodb": "latest",
+		"mongodb": "2.2.36",
 		"formidable": "latest"
 	},
 	"scripts": {

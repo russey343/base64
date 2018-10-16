@@ -17,7 +17,9 @@ var server = http.createServer(function (req, res) {
     form.parse(req, function (err, fields, files) {
       console.log(JSON.stringify(files));
       var filename = files.filetoupload.path;
-      var title = (fields.title.length > 0) ? fields.title : "untitled";
+      if (fields.title) {
+        var title = (fields.title.length > 0) ? fields.title : "untitled";
+      }
       var mimetype = files.filetoupload.type;
       console.log("title = " + title);
       console.log("filename = " + filename);

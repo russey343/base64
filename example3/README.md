@@ -12,4 +12,7 @@ npm install
 npm start
 ```
 ### Testing
-Send a GET request to http://localhost:8099/photos
+1. Send a GET request to insert a photo:
+http://localhost:8099/
+2. Send a GET request to show a list of photos in your `photo` collection:
+http://localhost:8099/photos
