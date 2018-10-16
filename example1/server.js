@@ -16,7 +16,7 @@ var server = http.createServer(function (req, res) {
       fs.readFile(filename, function(err,data) {
          var base64 = new Buffer(data).toString('base64');
          res.writeHead(200,{"Content-Type": "text/plain"});
-         res.write('File uploaded\n');         
+         res.write('File uploaded: (Base64)\n');         
          res.end(base64);
       })
     });
