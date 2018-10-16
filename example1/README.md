@@ -10,3 +10,5 @@ npm install
 ```
 npm start
 ```
+### Testing
+Send a GET request to http://localhost:8099
