@@ -30,7 +30,13 @@ var server = http.createServer(function (req, res) {
       console.log("title = " + title);
       console.log("filename = " + filename);
       fs.readFile(filename, function(err,data) {
-        MongoClient.connect(mongourl,function(err,db) {
+        MongoClient.connect(mongourl,function(err,db) {'
+          try {
+            assert.equal(err,null);
+          } catch (err) {
+            res.writeHead(500,{"Content-Type":"text/plain"});
+            res.end("MongoClient connect() failed!");
+          }
           var new_r = {};
           new_r['title'] = title;
           new_r['mimetype'] = mimetype;
@@ -45,8 +51,12 @@ var server = http.createServer(function (req, res) {
     });
   } else if (parsedURL.pathname == '/photos') {
     MongoClient.connect(mongourl, function(err,db) {
-      assert.equal(err,null);
-      console.log('Connected to MongoDB');
+      try {
+        assert.equal(err,null);
+      } catch (err) {
+        res.writeHead(500,{"Content-Type":"text/plain"});
+        res.end("MongoClient connect() failed!");
+      }      console.log('Connected to MongoDB');
       findPhoto(db,{},function(photos) {
         db.close();
         console.log('Disconnected MongoDB');
@@ -65,7 +75,12 @@ var server = http.createServer(function (req, res) {
     });
   } else if (parsedURL.pathname == '/display') {
     MongoClient.connect(mongourl, function(err,db) {
-      assert.equal(err,null);
+      try {
+        assert.equal(err,null);
+      } catch (err) {
+        res.writeHead(500,{"Content-Type":"text/plain"});
+        res.end("MongoClient connect() failed!");
+      }
       console.log('Connected to MongoDB');
       var criteria = {};
       criteria['_id'] = ObjectID(queryAsObject._id);
