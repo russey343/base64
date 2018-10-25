@@ -6,7 +6,8 @@ var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var ObjectID = require('mongodb').ObjectID;
 
-var mongourl = "";
+//var mongourl = "";
+var mongourl = "mongodb://developer:developer123@ds031873.mlab.com:31873/comps381f";
 
 var server = http.createServer(function (req, res) {
   var parsedURL = url.parse(req.url,true);
@@ -16,11 +17,17 @@ var server = http.createServer(function (req, res) {
     var form = new formidable.IncomingForm();
     form.parse(req, function (err, fields, files) {
       console.log(JSON.stringify(files));
+      if (files.filetoupload.size == 0) {
+        res.writeHead(500,{"Content-Type":"text/plain"});
+        res.end("No file uploaded!");  
+      }
       var filename = files.filetoupload.path;
       if (fields.title) {
         var title = (fields.title.length > 0) ? fields.title : "untitled";
       }
-      var mimetype = files.filetoupload.type;
+      if (files.filetoupload.type) {
+        var mimetype = files.filetoupload.type;
+      }
       console.log("title = " + title);
       console.log("filename = " + filename);
       fs.readFile(filename, function(err,data) {
@@ -70,9 +77,16 @@ var server = http.createServer(function (req, res) {
         var image = new Buffer(photo[0].image,'base64');        
         var contentType = {};
         contentType['Content-Type'] = photo[0].mimetype;
-        console.log('Preparing to send ' + JSON.stringify(contentType));
-        res.writeHead(200, contentType);
-        res.end(image);
+        console.log(contentType['Content-Type']);
+        if (contentType['Content-Type'] == "image/jpeg") {
+          console.log('Preparing to send ' + JSON.stringify(contentType));
+          res.writeHead(200, contentType);
+          res.end(image);
+        } else {
+          res.writeHead(500,{"Content-Type":"text/plain"});
+          res.end("Not JPEG format!!!");  
+        }
+
       });
     });
   } else {
@@ -87,7 +101,7 @@ var server = http.createServer(function (req, res) {
 });
 
 function insertPhoto(db,r,callback) {
-  db.collection('photos').insertOne(r,function(err,result) {
+  db.collection('photo').insertOne(r,function(err,result) {
     assert.equal(err,null);
     console.log("insert was successful!");
     console.log(JSON.stringify(result));
@@ -96,7 +110,7 @@ function insertPhoto(db,r,callback) {
 }
 
 function findPhoto(db,criteria,callback) {
-  var cursor = db.collection("photos").find(criteria);
+  var cursor = db.collection("photo").find(criteria);
   var photos = [];
   cursor.each(function(err,doc) {
     assert.equal(err,null);

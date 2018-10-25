@@ -4,7 +4,8 @@ var fs = require('fs');
 var formidable = require('formidable');
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
-var mongourl = "";
+//var mongourl = "";
+var mongourl = "mongodb://developer:developer123@ds031873.mlab.com:31873/comps381f";
 
 var server = http.createServer(function (req, res) {
   var parsedURL = url.parse(req.url,true);
@@ -13,6 +14,10 @@ var server = http.createServer(function (req, res) {
     var form = new formidable.IncomingForm();
     form.parse(req, function (err, fields, files) {
       console.log(JSON.stringify(files));
+      if (files.filetoupload.size == 0) {
+        res.writeHead(500,{"Content-Type":"text/plain"});
+        res.end("No file uploaded!");  
+      }
       var filename = files.filetoupload.path;
       var title = (fields.title.length > 0) ? fields.title : "untitled";
       var mimetype = files.filetoupload.type;
@@ -20,6 +25,12 @@ var server = http.createServer(function (req, res) {
       console.log("filename = " + filename);
       fs.readFile(filename, function(err,data) {
         MongoClient.connect(mongourl,function(err,db) {
+          try {
+            assert.equal(err,null);
+          } catch (err) {
+            res.writeHead(500,{"Content-Type":"text/plain"});
+            res.end("MongoClient connect() failed!");
+          }
           var new_r = {};
           new_r['title'] = title;
           new_r['mimetype'] = mimetype;

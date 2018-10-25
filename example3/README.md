@@ -1,5 +1,5 @@
 # Node.js Example: MongoDB Bas64
-An example of writing and reading documents containing Base64 data.  This example needs access to a collection named `photo`.
+An example of writing and reading documents containing Base64 data (JPEG only).  This example needs access to a collection named `photo`.
 
 ## Getting Started
 Change the value of variable `mongourl` to your mlab database.
