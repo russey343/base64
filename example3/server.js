@@ -6,8 +6,7 @@ var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var ObjectID = require('mongodb').ObjectID;
 
-//var mongourl = "";
-var mongourl = "mongodb://developer:developer123@ds031873.mlab.com:31873/comps381f";
+var mongourl = "";
 
 var server = http.createServer(function (req, res) {
   var parsedURL = url.parse(req.url,true);
