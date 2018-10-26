@@ -30,7 +30,7 @@ var server = http.createServer(function (req, res) {
       console.log("title = " + title);
       console.log("filename = " + filename);
       fs.readFile(filename, function(err,data) {
-        MongoClient.connect(mongourl,function(err,db) {'
+        MongoClient.connect(mongourl,function(err,db) {
           try {
             assert.equal(err,null);
           } catch (err) {
@@ -100,7 +100,6 @@ var server = http.createServer(function (req, res) {
           res.writeHead(500,{"Content-Type":"text/plain"});
           res.end("Not JPEG format!!!");  
         }
-
       });
     });
   } else {
