@@ -38,6 +38,7 @@ var server = http.createServer(function (req, res) {
           } catch (err) {
             res.writeHead(500,{"Content-Type":"text/plain"});
             res.end("MongoClient connect() failed!");
+            return(-1);
           }
           var new_r = {};
           new_r['title'] = title;
@@ -58,7 +59,9 @@ var server = http.createServer(function (req, res) {
       } catch (err) {
         res.writeHead(500,{"Content-Type":"text/plain"});
         res.end("MongoClient connect() failed!");
-      }      console.log('Connected to MongoDB');
+        return(-1);
+      }      
+      console.log('Connected to MongoDB');
       findPhoto(db,{},function(photos) {
         db.close();
         console.log('Disconnected MongoDB');
@@ -82,6 +85,7 @@ var server = http.createServer(function (req, res) {
       } catch (err) {
         res.writeHead(500,{"Content-Type":"text/plain"});
         res.end("MongoClient connect() failed!");
+        return(-1);
       }
       console.log('Connected to MongoDB');
       var criteria = {};

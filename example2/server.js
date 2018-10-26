@@ -31,6 +31,7 @@ var server = http.createServer(function (req, res) {
           } catch (err) {
             res.writeHead(500,{"Content-Type":"text/plain"});
             res.end("MongoClient connect() failed!");
+            return(-1);
           }
           var new_r = {};
           new_r['title'] = title;
