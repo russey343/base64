@@ -9,7 +9,9 @@ var mongourl = "";
 var server = http.createServer(function (req, res) {
   var parsedURL = url.parse(req.url,true);
   
-  if (parsedURL.pathname == '/fileupload') {
+  if (parsedURL.pathname == '/fileupload' && 
+      req.method.toLowerCase() == "post") {
+    // parse a file upload
     var form = new formidable.IncomingForm();
     form.parse(req, function (err, fields, files) {
       console.log(JSON.stringify(files));
