@@ -1,4 +1,4 @@
-# Node.js Example: MongoDB Bas64
+# Node.js Example: MongoDB Base64
 An example of inserting documents containing Base64 data.  This example inserts documents into a collection named `photo`.
 
 When you study this example, please pay attention to the following:
