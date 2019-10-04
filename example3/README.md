@@ -10,7 +10,7 @@ When you study this example, please pay attention to the following:
 6. [`ObjectId`](https://docs.mongodb.com/manual/reference/method/ObjectId/) is used as primary key to find a specific document in the `photo` collection.
 
 ## Getting Started
-Change the value of variable `mongourl` to your mlab database.
+Change the value of variable `mongourl` to your Cloud MongoDB.
 ### Installing
 ```
 npm install
