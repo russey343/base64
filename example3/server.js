@@ -44,7 +44,7 @@ const server = http.createServer((req, res) => {
               return(-1);
           }
           const db = client.db(dbName);
-          const new_r = {};
+          let new_r = {};
           new_r['title'] = title;
           new_r['mimetype'] = mimetype;
           new_r['image'] = new Buffer.from(data).toString('base64');
