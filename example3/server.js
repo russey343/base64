@@ -96,14 +96,14 @@ const server = http.createServer((req, res) => {
       }
       console.log('Connected to MongoDB');
       const db = client.db(dbName);
-      const criteria = {};
+      let criteria = {};
       criteria['_id'] = ObjectID(parsedURL.query._id);
       findPhoto(db,criteria,function(photo) {
         client.close();
         console.log('Disconnected MongoDB');
         console.log('Photo returned = ' + photo.length);
-        const image = new Buffer(photo[0].image,'base64');        
-        const contentType = {};
+        let image = new Buffer.from(photo[0].image,'base64');        
+        let contentType = {};
         contentType['Content-Type'] = photo[0].mimetype;
         // console.log(contentType['Content-Type']);
         if (contentType['Content-Type'] == "image/jpeg") {
@@ -138,7 +138,7 @@ const insertPhoto = (db,r,callback) => {
 
 const findPhoto = (db,criteria,callback) => {
   const cursor = db.collection("photo").find(criteria);
-  const photos = [];
+  let photos = [];
   cursor.forEach((doc) => {
     photos.push(doc);
   }, (err) => {
