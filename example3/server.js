@@ -25,14 +25,14 @@ const server = http.createServer((req, res) => {
         res.end("No file uploaded!");  
       }
       const filename = files.filetoupload.path;
-      if (fields.title) {
-        const title = (fields.title.length > 0) ? fields.title : "untitled";
+      let title = "untitled";
+      let mimetype = "images/jpeg";
+      if (fields.title && fields.title.length > 0) {
+        title = fields.title;
       }
       if (files.filetoupload.type) {
-        const mimetype = files.filetoupload.type;
+        mimetype = files.filetoupload.type;
       }
-      // console.log("title = " + fields.title);
-      // console.log("filename = " + files.filetoupload.path);
       fs.readFile(files.filetoupload.path, (err,data) => {
         let client = new MongoClient(mongourl);
         client.connect((err) => {
@@ -45,13 +45,14 @@ const server = http.createServer((req, res) => {
           }
           const db = client.db(dbName);
           const new_r = {};
-          new_r['title'] = fields.title;
-          new_r['mimetype'] = files.filetoupload.type;
+          new_r['title'] = title;
+          new_r['mimetype'] = mimetype;
           new_r['image'] = new Buffer.from(data).toString('base64');
           insertPhoto(db,new_r,(result) => {
             client.close();
-            res.writeHead(200, {"Content-Type": "text/plain"});
-            res.end('Photo was inserted into MongoDB!');
+            res.writeHead(200, {"Content-Type": "text/html"});
+            res.write('<html><body>Photo was inserted into MongoDB!<br>');
+            res.end('<a href="/photos">Back</a></body></html>')
           })
         });
       })
