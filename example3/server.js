@@ -68,7 +68,7 @@ const server = http.createServer((req, res) => {
       }      
       console.log('Connected to MongoDB');
       const db = client.db(dbName);
-      findPhoto(db,{},function(photos) {
+      findPhoto(db,{},(photos) => {
         client.close();
         console.log('Disconnected MongoDB');
         res.writeHead(200, {"Content-Type": "text/html"});			
@@ -98,7 +98,7 @@ const server = http.createServer((req, res) => {
       const db = client.db(dbName);
       let criteria = {};
       criteria['_id'] = ObjectID(parsedURL.query._id);
-      findPhoto(db,criteria,function(photo) {
+      findPhoto(db,criteria,(photo) => {
         client.close();
         console.log('Disconnected MongoDB');
         console.log('Photo returned = ' + photo.length);
