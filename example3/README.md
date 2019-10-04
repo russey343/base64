@@ -7,7 +7,7 @@ When you study this example, please pay attention to the following:
 3. How to convert the uploaded file to Base64.
 4. How to insert documents containing Base64 data.
 5. How to decode Base64 data.
-6. [`ObjectId`](https://docs.mongodb.com/manual/reference/method/ObjectId/) is used as primary key to find a specific document in the `photo` collection.
+6. [`ObjectId`](https://docs.mongodb.com/manual/reference/method/ObjectId/) is used as primary key (as **find** criteria).
 
 ## Getting Started
 Change the value of variable `mongourl` to your Cloud MongoDB.
