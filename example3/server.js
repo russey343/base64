@@ -47,7 +47,7 @@ const server = http.createServer((req, res) => {
           const new_r = {};
           new_r['title'] = fields.title;
           new_r['mimetype'] = files.filetoupload.type;
-          new_r['image'] = new Buffer(data).toString('base64');
+          new_r['image'] = new Buffer.from(data).toString('base64');
           insertPhoto(db,new_r,(result) => {
             client.close();
             res.writeHead(200, {"Content-Type": "text/plain"});
@@ -139,14 +139,13 @@ const insertPhoto = (db,r,callback) => {
 const findPhoto = (db,criteria,callback) => {
   const cursor = db.collection("photo").find(criteria);
   const photos = [];
-  cursor.each(function(err,doc) {
+  cursor.forEach((doc) => {
+    photos.push(doc);
+  }, (err) => {
+    // done or error
     assert.equal(err,null);
-    if (doc != null) {
-      photos.push(doc);
-    } else {
-      callback(photos);
-    }
-  });
+    callback(photos);
+  })
 }
 
 server.listen(process.env.PORT || 8099);
