@@ -1,31 +1,33 @@
-var http = require('http');
-var url = require('url');
-var fs = require('fs');
-var formidable = require('formidable');
-var MongoClient = require('mongodb').MongoClient;
-var assert = require('assert');
-var mongourl = "";
+const http = require('http');
+const url = require('url');
+const fs = require('fs');
+const formidable = require('formidable');
+const MongoClient = require('mongodb').MongoClient;
+const assert = require('assert');
+const mongourl = "";
+const dbName = "";
 
-var server = http.createServer(function (req, res) {
-  var parsedURL = url.parse(req.url,true);
-  
+const server = http.createServer((req, res) => {
+  let timestamp = new Date().toISOString();
+  console.log(`Incoming request ${req.method}, ${req.url} received at ${timestamp}`);
+
+  let parsedURL = url.parse(req.url,true); // true to get query as object
+
   if (parsedURL.pathname == '/fileupload' && 
       req.method.toLowerCase() == "post") {
     // parse a file upload
-    var form = new formidable.IncomingForm();
+    const form = new formidable.IncomingForm();
     form.parse(req, function (err, fields, files) {
-      console.log(JSON.stringify(files));
       if (files.filetoupload.size == 0) {
         res.writeHead(500,{"Content-Type":"text/plain"});
         res.end("No file uploaded!");  
       }
-      var filename = files.filetoupload.path;
-      var title = (fields.title.length > 0) ? fields.title : "untitled";
-      var mimetype = files.filetoupload.type;
-      console.log("title = " + title);
-      console.log("filename = " + filename);
-      fs.readFile(filename, function(err,data) {
-        MongoClient.connect(mongourl,function(err,db) {
+      const filename = files.filetoupload.path;
+      const title = (fields.title.length > 0) ? fields.title : "untitled";
+      const mimetype = files.filetoupload.type;
+      fs.readFile(filename, (err,data) => {
+        const client = new MongoClient(mongourl);
+        client.connect((err) => {
           try {
             assert.equal(err,null);
           } catch (err) {
@@ -33,12 +35,14 @@ var server = http.createServer(function (req, res) {
             res.end("MongoClient connect() failed!");
             return(-1);
           }
-          var new_r = {};
+          console.log('Connected to MongoDB server.')
+          const db = client.db(dbName);
+          const new_r = {};  // new document to be inserted
           new_r['title'] = title;
           new_r['mimetype'] = mimetype;
           new_r['image'] = new Buffer(data).toString('base64');
-          insertPhoto(db,new_r,function(result) {
-            db.close();
+          insertPhoto(db,new_r,(result) => {
+            client.close();
             res.writeHead(200, {"Content-Type": "text/plain"});
             res.end('Photo was inserted into MongoDB!');
           })
@@ -56,7 +60,7 @@ var server = http.createServer(function (req, res) {
   }
 });
 
-function insertPhoto(db,r,callback) {
+const insertPhoto = (db,r,callback) => {
   db.collection('photo').insertOne(r,function(err,result) {
     assert.equal(err,null);
     console.log("insert was successful!");
