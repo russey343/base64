@@ -19,7 +19,7 @@ const server = http.createServer((req, res) => {
     // parse a file upload
     const form = new formidable.IncomingForm();
     form.parse(req, (err, fields, files) => {
-      console.log(JSON.stringify(files));
+      // console.log(JSON.stringify(files));
       if (files.filetoupload.size == 0) {
         res.writeHead(500,{"Content-Type":"text/plain"});
         res.end("No file uploaded!");  
@@ -31,8 +31,8 @@ const server = http.createServer((req, res) => {
       if (files.filetoupload.type) {
         const mimetype = files.filetoupload.type;
       }
-      console.log("title = " + fields.title);
-      console.log("filename = " + files.filetoupload.path);
+      // console.log("title = " + fields.title);
+      // console.log("filename = " + files.filetoupload.path);
       fs.readFile(files.filetoupload.path, (err,data) => {
         let client = new MongoClient(mongourl);
         client.connect((err) => {
@@ -105,7 +105,7 @@ const server = http.createServer((req, res) => {
         const image = new Buffer(photo[0].image,'base64');        
         const contentType = {};
         contentType['Content-Type'] = photo[0].mimetype;
-        console.log(contentType['Content-Type']);
+        // console.log(contentType['Content-Type']);
         if (contentType['Content-Type'] == "image/jpeg") {
           console.log('Preparing to send ' + JSON.stringify(contentType));
           res.writeHead(200, contentType);
@@ -128,7 +128,7 @@ const server = http.createServer((req, res) => {
 });
 
 const insertPhoto = (db,r,callback) => {
-  db.collection('photo').insertOne(r,function(err,result) {
+  db.collection('photo').insertOne(r,(err,result) => {
     assert.equal(err,null);
     console.log("insert was successful!");
     console.log(JSON.stringify(result));
