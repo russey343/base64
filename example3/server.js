@@ -5,8 +5,8 @@ const formidable = require('formidable');
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 const ObjectID = require('mongodb').ObjectID;
-const mongourl = "";
-const dbName = "";
+const mongourl = "mongodb+srv://rus:<password>@cluster0-ynycb.mongodb.net/test?retryWrites=true&w=majority";
+const dbName = "test";
 
 const server = http.createServer((req, res) => {
   let timestamp = new Date().toISOString();
